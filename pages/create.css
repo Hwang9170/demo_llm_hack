@@ -1,0 +1,17 @@
+/* 생성 페이지 전용 옵션 스타일 */
+.create-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px}
+.btn-primary{background:#007AFF;color:#fff;border:none;padding:10px 14px;border-radius:10px;font-weight:700;cursor:pointer}
+.btn-primary:hover{background:#0b61d6}
+.help-text{color:#6b7280;font-size:12px}
+
+.custom-mode .preset-section{display:none}
+.custom-mode .custom-section{display:block}
+.custom-section[hidden]{display:none}
+.option-grid { display:grid; grid-template-columns:repeat(4,1fr); gap:12px; }
+.option-card { border:2px solid #e3eefc; background:#f6fbff; padding:14px 12px; border-radius:12px; text-align:center; cursor:pointer; font-weight:700; color:#1f2d3d; transition:all .2s ease; }
+.option-card:hover{ transform:translateY(-2px); box-shadow:0 4px 10px rgba(0,0,0,.06); }
+.option-card.selected{ border-color:#007AFF; background:#e9f2ff; color:#0b61d6 }
+.chip-row{ display:flex; flex-wrap:wrap; gap:10px; }
+.chip{ border:1px solid #d0d7e2; background:#fff; color:#374151; padding:8px 12px; border-radius:999px; cursor:pointer; transition:all .2s ease; }
+.chip:hover{ background:#f4f8ff }
+.chip.selected{ background:#e9f2ff; border-color:#007AFF; color:#0b61d6 }

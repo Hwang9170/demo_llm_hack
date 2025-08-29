@@ -1,0 +1,84 @@
+<section id="profile-page" class="page active">
+  <div class="profile-page">
+    <div class="profile-title-row">
+      <h2 class="section-title" style="text-align:left;margin-bottom:12px;">우리 아이 프로필</h2>
+      <button class="btn-edit" id="profile-edit-btn">수정</button>
+    </div>
+
+    <div class="kid-card">
+      <div class="kid-left">
+        <div class="kid-avatar" aria-label="아이 아바타"></div>
+        <div class="kid-name" id="kid-name">정도훈</div>
+        <div class="kid-meta" id="kid-meta">6살 장난꾸러기</div>
+        <ul class="kid-tags" id="kid-tags">
+          <li>#용감한</li>
+          <li>#정의로운</li>
+          <li>#호기심이 많은</li>
+        </ul>
+      </div>
+
+      <div class="kid-divider" role="separator" aria-hidden="true"></div>
+
+      <div class="kid-middle">
+        <div class="keyword-title">선호 키워드</div>
+        <div class="keyword-bubbles">
+          <span class="bubble bubble-lg bubble-primary">우정</span>
+          <span class="bubble bubble-md">교훈</span>
+          <span class="bubble bubble-sm">왕자</span>
+          <span class="bubble bubble-sm">우주</span>
+        </div>
+      </div>
+
+      <div class="kid-right">
+        <ol class="keyword-ranking">
+          <li>우정</li>
+          <li>교훈</li>
+          <li>우주</li>
+          <li>왕자</li>
+        </ol>
+      </div>
+    </div>
+
+    <div class="learning-header">
+      <h3 class="learning-title">학습용 이미지</h3>
+      <div class="learning-actions">
+        <button class="btn-secondary" id="add-learning-image">추가</button>
+        <input type="file" id="learning-file-input" accept="image/*" multiple hidden>
+      </div>
+    </div>
+
+    <div class="learning-images">
+      <div class="image-strip" id="learning-image-strip">
+        <div class="image-cell placeholder"></div>
+        <div class="image-cell placeholder"></div>
+        <div class="image-cell placeholder"></div>
+        <div class="image-cell placeholder"></div>
+      </div>
+    </div>
+  </div>
+
+  <!-- 프로필 수정 모달 -->
+  <div class="modal" id="profile-edit-modal" aria-hidden="true">
+    <div class="modal-panel" role="dialog" aria-modal="true" aria-labelledby="profile-edit-title">
+      <h3 id="profile-edit-title">프로필 수정</h3>
+      <form id="profile-edit-form">
+        <div class="form-row">
+          <label>이름</label>
+          <input type="text" name="name" placeholder="우리 아이 이름" required>
+        </div>
+        <div class="form-row">
+          <label>설명</label>
+          <input type="text" name="desc" placeholder="ex) 6살 장난꾸러기">
+        </div>
+        <div class="form-row">
+          <label>태그 (쉼표로 구분)</label>
+          <input type="text" name="tags" placeholder="용감한, 정의로운, 호기심이 많은">
+        </div>
+        <div class="modal-actions">
+          <button type="button" class="btn-secondary" id="profile-edit-cancel">취소</button>
+          <button type="submit" class="btn-edit">저장</button>
+        </div>
+      </form>
+    </div>
+  </div>
+</section>

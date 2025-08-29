@@ -1,0 +1,36 @@
+/* 프로필 페이지 전용 스타일 */
+.profile-page { max-width: 1000px; margin: 0 auto; }
+.profile-title-row { display: flex; align-items: center; justify-content: space-between; }
+.btn-edit,.btn-secondary { background:#fff; border:1px solid #d0d7e2; color:#1f2d3d; padding:8px 14px; border-radius:10px; font-size:14px; cursor:pointer; }
+.btn-edit:hover,.btn-secondary:hover { background:#f5f8ff; }
+.kid-card { background:#eaf5ff; border-radius:16px; padding:24px; display:grid; grid-template-columns:1fr 12px 1.2fr 0.8fr; gap:12px 24px; align-items:center; }
+.kid-left { display:flex; flex-direction:column; align-items:center; gap:8px; }
+.kid-avatar { width:84px; height:84px; border-radius:50%; background:linear-gradient(135deg,#fff,#f2f7ff); border:2px solid #d7e6ff; }
+.kid-name { font-size:18px; font-weight:700; color:#1f2d3d; }
+.kid-meta { font-size:14px; color:#80a4d4; }
+.kid-tags { list-style:none; display:flex; flex-direction:column; gap:4px; color:#1f2d3d; font-size:14px; }
+.kid-divider { width:1px; height:100%; background:#cfe4ff; justify-self:center; }
+.keyword-title { font-size:14px; color:#4b89dc; margin-bottom:10px; }
+.keyword-bubbles { display:flex; align-items:flex-end; gap:10px; flex-wrap:wrap; }
+.bubble { display:inline-flex; align-items:center; justify-content:center; border-radius:999px; background:#d9ecff; color:#1f2d3d; font-weight:700; }
+.bubble-sm{width:54px;height:54px;font-size:12px}.bubble-md{width:72px;height:72px;font-size:13px}.bubble-lg{width:96px;height:96px;font-size:16px}.bubble-primary{background:#6fb5ff;color:#fff}
+.keyword-ranking { list-style:decimal; padding-left:18px; display:flex; flex-direction:column; gap:8px; font-weight:700; color:#1f2d3d; }
+.learning-header { display:flex; align-items:center; gap:10px; margin-top:28px; margin-bottom:10px; }
+.learning-title { font-size:22px; }
+.learning-images { background:#eaf5ff; padding:24px; border-radius:16px; }
+.image-strip { background:#fff; border:1px solid #cfd8e3; border-radius:12px; display:grid; grid-template-columns:repeat(4,1fr); overflow:hidden; }
+.image-cell { position:relative; height:180px; border-left:1px solid #cfd8e3; }
+.image-cell:first-child{border-left:none}
+.image-cell.placeholder::after{content:""; position:absolute; inset:16px; border:1px dashed #cfd8e3; border-radius:8px;}
+.image-cell img{width:100%; height:100%; object-fit:cover; display:block}
+@media (max-width:900px){.kid-card{grid-template-columns:1fr}.kid-divider{display:none}.image-strip{grid-template-columns:repeat(2,1fr)}}
+
+/* 모달 */
+.modal{position:fixed; inset:0; background:rgba(0,0,0,.3); display:none; align-items:center; justify-content:center; z-index:2000}
+.modal.show{display:flex}
+.modal-panel{width:420px; background:#fff; border-radius:12px; box-shadow:0 10px 30px rgba(0,0,0,.2); padding:20px}
+.modal-panel h3{margin-bottom:12px}
+.form-row{display:flex; flex-direction:column; gap:8px; margin-bottom:12px}
+.form-row input{padding:12px; border:1px solid #d0d7e2; border-radius:10px; font-size:14px}
+.modal-actions{display:flex; justify-content:flex-end; gap:8px; margin-top:4px}
+

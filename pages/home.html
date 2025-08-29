@@ -1,0 +1,56 @@
+<section id="home-page" class="page active">
+  <!-- dev-only: open this partial directly and still get styles -->
+  <script>
+    (function () {
+      try {
+        var has = Array.from(
+          document.querySelectorAll('link[rel="stylesheet"]')
+        ).some(function (l) {
+          return (l.getAttribute("href") || "").endsWith("style.css");
+        });
+        if (!has) {
+          var link = document.createElement("link");
+          link.rel = "stylesheet";
+          link.href = "../style.css";
+          document.head.appendChild(link);
+        }
+      } catch (e) {}
+    })();
+  </script>
+  <div class="home-hero">
+    <div class="home-hero-panel">
+      <div class="home-hero-header">
+        <!-- <img
+          src="../assets/images/logo_dreambook.png"
+          alt="꿈책방 로고"
+          class="home-hero-logo"
+        /> -->
+        꿈책방
+      </div>
+      <div class="home-hero-line"></div>
+      <div class="home-hero-inner">
+        <div class="home-title-wrap">
+          <h1 class="home-title">
+            오직 우리 아이를 위한<br />세상에 단 하나뿐인
+          </h1>
+          <p class="home-subtitle">
+            우리 아이가 동화속 주인공이 되는 생성형 맞춤형 AI
+            서비스<br />아이의 성격과 선호 키워드까지 고려해 딱! 맞는
+            동화책을 만들어줘요
+          </p>
+        </div>
+        <div class="home-actions">
+          <button class="btn-lg btn-naver" id="home-naver-btn">
+            <span class="naver-n">N</span> 네이버로 빠르게 시작하기
+          </button>
+          <button class="btn-lg btn-secondary-ghost btn-start-alt">
+            다른 방식으로 시작하기
+          </button>
+          <button class="btn-lg btn-dark btn-explore">
+            꿈책방 둘러보기
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
