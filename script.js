@@ -487,7 +487,7 @@ function generateBookContent(childInfo, title, theme, pageCount) {
             illustration: '🌲✨'
         },
         {
-            text: `${theme}에 대한 이야기가 펼쳐지기 시작했답니다.`,
+            text: `${theme}에 대한 이야기가. 펼쳐지기 시작했답니다.`,
             illustration: '📖🎭'
         },
         {
