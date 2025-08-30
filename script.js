@@ -9,14 +9,14 @@ let profileData = null;
 let isCreateCustomMode = false;
 
 // 프록시 서버(동일 출처) 사용: server.js가 /api/* 를 원격으로 프록시
-let base = "";
+let base = ""; // Ensure this points to the correct server base URL (e.g., "/api")
 
 async function apiFetch(path, options = {}) {
   const url = `${base}${path}`;
   const { useCredentials = false, headers = {}, ...rest } = options;
   const res = await fetch(url, {
     credentials: useCredentials ? "include" : "omit",
-    mode: "same-origin",
+    mode: "cors", // Ensure CORS is enabled
     headers: { "Content-Type": "application/json", ...headers },
     ...rest,
   });
@@ -393,7 +393,6 @@ async function generateBook() {
     const outline = `주인공: ${childInfo}\n주제/테마: ${bookTheme}\n키워드: ${keywordsArr.join(', ')}\n페이지 수: ${pageCount}`;
 
     try {
-        // ✅ 공통 fetch 함수 사용
         const data = await apiFetch("/api/story/make", {
             method: "POST",
             body: JSON.stringify({
@@ -409,9 +408,12 @@ async function generateBook() {
         const storyText = String(data.story || "").trim();
         const paragraphs = storyText.split(/\n\s*\n+/).filter(Boolean);
 
-        const content = paragraphs
-            .slice(0, Math.max(1, Math.min(parseInt(pageCount) || 5, paragraphs.length)))
-            .map(p => ({ text: p, illustration: "📖✨" }));
+        // API 응답에서 이미지 경로 매핑
+        const images = data.images || [];
+        const content = paragraphs.map((p, index) => ({
+            text: p,
+            illustration: images[index]?.file_path || "📖✨" // 이미지 경로 또는 기본값
+        }));
 
         displayGeneratedContent(content);
 
@@ -432,7 +434,7 @@ async function generateBook() {
     } catch (err) {
         console.error("책 생성 실패:", err);
 
-        // ⚠️ 백엔드 실패 시 폴백 (로컬 시뮬레이션)
+        // 백엔드 실패 시 폴백 (로컬 시뮬레이션)
         const content = generateBookContent(childInfo, bookTitle, bookTheme || (keywordsArr[0] || ""), pageCount);
         displayGeneratedContent(content);
 
@@ -670,6 +672,7 @@ let currentBookPage = 0;
 function initializeReader() {
     const prevBtn = document.querySelector('.prev-page');
     const nextBtn = document.querySelector('.next-page');
+    const listenBtn = document.querySelector('.btn-listen'); // 듣기 버튼 선택
 
     if (prevBtn) {
         prevBtn.addEventListener('click', function() {
@@ -688,6 +691,12 @@ function initializeReader() {
             }
         });
     }
+
+    if (listenBtn) {
+        listenBtn.addEventListener('click', function() {
+            playTTSForCurrentPage(); // 동적으로 이벤트 바인딩
+        });
+    }
 }
 
 // 책 읽기 내용 업데이트
@@ -696,18 +705,27 @@ function updateReaderContent() {
 
     const leftPage = document.querySelector('.left-page .page-text');
     const rightPage = document.querySelector('.right-page .page-text');
+    const leftImage = document.querySelector('.left-page .page-illustration'); // 이미지 영역
+    const rightImage = document.querySelector('.right-page .page-illustration'); // 이미지 영역
     const pageIndicator = document.querySelector('.page-indicator');
 
     if (currentBookPage < currentBook.content.length) {
         const currentPageContent = currentBook.content[currentBookPage];
         leftPage.innerHTML = `<p>${currentPageContent.text}</p>`;
-        
+        leftImage.innerHTML = currentPageContent.illustration 
+            ? `<img src="${currentPageContent.illustration}" alt="삽화">` 
+            : '<p>이미지가 없습니다.</p>';
+
         // 다음 페이지가 있으면 오른쪽에 표시
         if (currentBookPage + 1 < currentBook.content.length) {
             const nextPageContent = currentBook.content[currentBookPage + 1];
             rightPage.innerHTML = `<p>${nextPageContent.text}</p>`;
+            rightImage.innerHTML = nextPageContent.illustration 
+                ? `<img src="${nextPageContent.illustration}" alt="삽화">` 
+                : '<p>이미지가 없습니다.</p>';
         } else {
             rightPage.innerHTML = '<p>끝</p>';
+            rightImage.innerHTML = '';
         }
     }
 
@@ -953,4 +971,29 @@ document.head.appendChild(styleSheet);
 // 네이버 로그인 핸들러
 function handleNaverLogin() {
     window.location.href = `/api/login/naver`; 
+}
+
+// TTS 재생 함수
+async function playTTS(storyId) {
+  try {
+    const response = await apiFetch(`/tts`, {
+      method: "POST",
+      body: JSON.stringify({ storyId }),
+    });
+
+    const audioPath = response.ttsAudioPath;
+    if (!audioPath) {
+      throw new Error("TTS 오디오 경로를 찾을 수 없습니다.");
+    }
+
+    // 오디오 재생
+    const audio = new Audio(audioPath);
+    audio.play().catch((error) => {
+      console.error("오디오 재생 실패:", error);
+      alert("오디오를 재생할 수 없습니다. 다시 시도해주세요.");
+    });
+  } catch (error) {
+    console.error("TTS 재생 실패:", error);
+    alert("TTS를 재생할 수 없습니다. 다시 시도해주세요.");
+  }
 }

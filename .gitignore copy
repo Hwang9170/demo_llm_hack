@@ -1,0 +1,15 @@
+# 환경 변수 파일
+.env
+.env.local
+
+# Python 관련
+__pycache__/
+*.pyc
+*.pyo
+
+# Node.js 관련
+node_modules/
+npm-debug.log*
+
+# 기타
+.DS_Store

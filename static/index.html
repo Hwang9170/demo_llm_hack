@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>꿈책방 - 아이들을 위한 맞춤 동화책</title>
+    <link rel="stylesheet" href="/static/style.css?v=20250829-1">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+</head>
+<body>
+    <!-- 사이드바 네비게이션 -->
+    <nav class="sidebar">
+        <div class="sidebar-header">
+            <a href="#"><h1 class="logo"><img src="/static/logo.png" width="50px" alt="로고"></h1></a>
+        </div>
+        <ul class="nav-menu">
+            <li class="nav-item active">
+                <a href="/static/pages/home.html" class="nav-link" data-page="home">
+                    <i class="fas fa-home"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/static/pages/create.html" class="nav-link" data-page="create">
+                    <i class="fas fa-edit"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/static/pages/library.html" class="nav-link" data-page="library">
+                    <i class="fas fa-book"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/static/pages/profile.html" class="nav-link" data-page="profile">
+                    <i class="fas fa-user"></i>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a href="/static/pages/settings.html" class="nav-link" data-page="settings">
+                    <i class="fas fa-cog"></i>
+                </a>
+            </li>
+        </ul>
+        <div class="sidebar-footer">
+            <button class="menu-toggle">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </nav>
+
+    <!-- 메인 콘텐츠 영역 -->
+    <main class="main-content">
+        <div id="app"></div>
+    </main>
+
+    <script src="/static/script.js?v=20250829-2"></script>
+</body>
+</html>

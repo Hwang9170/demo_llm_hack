@@ -1,0 +1,154 @@
+<section id="create-page" class="page active">
+  <!-- dev-only: open this partial directly and still get styles/scripts -->
+  <script>
+    (function(){
+      try {
+        // ensure style
+        var hasCss = Array.from(document.querySelectorAll('link[rel="stylesheet"]'))
+          .some(function(l){ return (l.getAttribute('href')||'').includes('style.css'); });
+        if(!hasCss){
+          var link = document.createElement('link'); link.rel='stylesheet'; link.href='../style.css'; document.head.appendChild(link);
+          var link2 = document.createElement('link'); link2.rel='stylesheet'; link2.href='./create.css'; document.head.appendChild(link2);
+        }
+        // ensure app script
+        if(typeof window.navigate !== 'function'){
+          var s=document.createElement('script'); s.src='../script.js'; document.body.appendChild(s);
+          var s2=document.createElement('script'); s2.src='./create.js'; document.body.appendChild(s2);
+        }
+      } catch(e) {}
+    })();
+  </script>
+  <div class="create-section">
+    <div class="form-container">
+      <div class="create-header">
+        <div></div>
+        <button type="button" class="btn-primary" id="custom-toggle-btn">커스텀으로 만들기</button>
+      </div>
+      <div class="form-group">
+        <label for="child-info">어떤 아이를 위한 건가요?</label>
+        <input type="text" id="child-info" placeholder="아이의 이름이나 특징을 입력해주세요">
+      </div>
+
+      <div class="form-group">
+        <label for="book-title">제목을 지어주세요!</label>
+        <input type="text" id="book-title" placeholder="동화책 제목을 입력해주세요">
+      </div>
+
+      <div class="form-group preset-section">
+        <label for="book-theme">테마를 선택해주세요!</label>
+        <input type="hidden" id="book-theme" />
+        <div class="option-grid">
+          <div class="option-card" data-theme-card data-value="우정">우정</div>
+          <div class="option-card" data-theme-card data-value="모험">모험</div>
+          <div class="option-card" data-theme-card data-value="우주">우주</div>
+          <div class="option-card" data-theme-card data-value="공주/왕자">공주/왕자</div>
+          <div class="option-card" data-theme-card data-value="동물">동물</div>
+          <div class="option-card" data-theme-card data-value="학교">학교</div>
+          <div class="option-card" data-theme-card data-value="가족">가족</div>
+          <div class="option-card" data-theme-card data-value="계절">계절</div>
+        </div>
+      </div>
+
+      <div class="form-group preset-section">
+        <label>분위기/주제 키워드</label>
+        <input type="hidden" id="book-keywords" />
+        <div class="chip-row">
+          <button type="button" class="chip" data-keyword-chip data-value="우정">#우정</button>
+          <button type="button" class="chip" data-keyword-chip data-value="교훈">#교훈</button>
+          <button type="button" class="chip" data-keyword-chip data-value="모험">#모험</button>
+          <button type="button" class="chip" data-keyword-chip data-value="우주">#우주</button>
+          <button type="button" class="chip" data-keyword-chip data-value="따뜻한">#따뜻한</button>
+          <button type="button" class="chip" data-keyword-chip data-value="재밌는">#재밌는</button>
+          <button type="button" class="chip" data-keyword-chip data-value="감동">#감동</button>
+          <button type="button" class="chip" data-keyword-chip data-value="신나는">#신나는</button>
+        </div>
+      </div>
+
+      <!-- 커스텀 입력 섹션 -->
+      <div class="form-group custom-section" hidden>
+        <label for="custom-theme">테마를 직접 입력하세요</label>
+        <input type="text" id="custom-theme" placeholder="예: 우정과 모험의 이야기">
+      </div>
+      <div class="form-group custom-section" hidden>
+        <label for="custom-keywords">키워드 (쉼표로 구분)</label>
+        <input type="text" id="custom-keywords" placeholder="예: 우정, 교훈, 우주">
+        <small class="help-text">입력한 키워드는 생성 시 반영돼요. 예: 우정, 모험, 따뜻한</small>
+      </div>
+
+      <div class="form-group">
+        <label for="page-count">페이지 수를 선택해주세요!</label>
+        <select id="page-count">
+          <option value="">페이지 수 선택</option>
+          <option value="5">5페이지</option>
+          <option value="10">10페이지</option>
+          <option value="15">15페이지</option>
+          <option value="20">20페이지</option>
+        </select>
+      </div>
+
+      <div class="form-group">
+        <label for="tts-model">TTS 모델을 선택해주세요!</label>
+        <select id="tts-model">
+          <option value="">TTS 모델 선택</option>
+          <option value="child-voice">아이 목소리</option>
+          <option value="adult-voice">어른 목소리</option>
+          <option value="character-voice">캐릭터 목소리</option>
+        </select>
+      </div>
+
+      <button class="generate-button" id="generate-btn">
+        출력 생성
+      </button>
+    </div>
+
+    <div class="preview-container">
+      <div class="preview-area" id="preview-area">
+        <p class="preview-placeholder">여기에 출력이 생성됩니다.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<script>
+  document.getElementById('generate-btn').addEventListener('click', async () => {
+    const childInfo = document.getElementById('child-info')?.value?.trim();
+    const bookTitle = document.getElementById('book-title')?.value?.trim();
+    const bookTheme = document.getElementById('book-theme')?.value?.trim();
+    const bookKeywords = document.getElementById('book-keywords')?.value;
+    const pageCount = document.getElementById('page-count')?.value;
+    const ttsModel = document.getElementById('tts-model')?.value;
+
+    if (!childInfo || !bookTitle || !bookTheme || !pageCount || !ttsModel) {
+      alert('모든 필드를 입력해주세요!');
+      return;
+    }
+
+    const outline = `주인공: ${childInfo}\n주제/테마: ${bookTheme}\n키워드: ${bookKeywords}\n페이지 수: ${pageCount}`;
+    const previewArea = document.getElementById('preview-area');
+    previewArea.innerHTML = '<p>AI가 동화를 생성 중입니다...</p>';
+
+    try {
+      const response = await fetch('/storybook', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          title: bookTitle,
+          outline,
+          age: '6-8세',
+          style: '따뜻한',
+          length: pageCount,
+          moral: true,
+        }),
+      });
+
+      if (!response.ok) throw new Error('동화 생성 실패');
+
+      const data = await response.json();
+      const story = data.story || '생성된 동화가 없습니다.';
+      previewArea.innerHTML = `<p>${story.replace(/\n/g, '<br>')}</p>`;
+    } catch (error) {
+      console.error(error);
+      previewArea.innerHTML = '<p>동화 생성 중 오류가 발생했습니다.</p>';
+    }
+  });
+</script>
