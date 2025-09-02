@@ -905,3 +905,8 @@ body {
 .loading {
   animation: pulse 1.5s ease-in-out infinite;
 }
+
+img {
+  max-width: 100%; /* 부모에 맞게 채움 */
+  height: auto;
+}

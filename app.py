@@ -1,10 +1,11 @@
-from fastapi import FastAPI, Request
-from fastapi.responses import JSONResponse, FileResponse
+from fastapi import FastAPI, Request, HTTPException
+from fastapi.responses import JSONResponse, FileResponse, RedirectResponse
 from fastapi.staticfiles import StaticFiles
 from fastapi.middleware.cors import CORSMiddleware
 from dotenv import load_dotenv
 import requests, os, uuid, re
 from google import genai  # google-genai SDK
+from urllib.parse import urlencode
 
 # .env 파일 로드
 load_dotenv()
@@ -43,6 +44,10 @@ TTS_CLIENT_SECRET = os.getenv("TTS_CLIENT_SECRET")
 # ===== Google GenAI (Imagen) =====
 IMAGEN_MODEL = "imagen-3.0-generate-002"
 genai_client = genai.Client(api_key=os.getenv("GENAI_API_KEY"))
+
+NAVER_CLIENT_ID = os.getenv("NAVER_CLIENT_ID")
+NAVER_CLIENT_SECRET = os.getenv("NAVER_CLIENT_SECRET")
+NAVER_REDIRECT_URI = "http://127.0.0.1:5500/api/login/naver/callback"  # 포트 수정
 
 # ------------------------------
 # API: 동화 + 이미지 + TTS 생성
@@ -212,3 +217,58 @@ async def tts(req: Request):
             {"error": f"TTS 호출 실패: {e}", "raw": getattr(r, "text", "")},
             status_code=500
         )
+
+
+# ------------------------------
+# API: 네이버 로그인
+# ------------------------------
+@app.get("/api/login/naver")
+async def naver_login():
+    params = {
+        "response_type": "code",
+        "client_id": NAVER_CLIENT_ID,
+        "redirect_uri": NAVER_REDIRECT_URI,
+        "state": uuid.uuid4().hex,
+    }
+    naver_auth_url = f"https://nid.naver.com/oauth2.0/authorize?{urlencode(params)}"
+    return RedirectResponse(naver_auth_url)
+
+@app.get("/api/login/naver/callback")
+async def naver_callback(code: str, state: str):
+    try:
+        # 네이버 토큰 요청
+        token_url = "https://nid.naver.com/oauth2.0/token"
+        token_params = {
+            "grant_type": "authorization_code",
+            "client_id": NAVER_CLIENT_ID,
+            "client_secret": NAVER_CLIENT_SECRET,
+            "code": code,
+            "state": state,
+        }
+        token_response = requests.post(token_url, params=token_params)
+        token_response.raise_for_status()
+        token_data = token_response.json()
+        access_token = token_data.get("access_token")
+
+        if not access_token:
+            raise HTTPException(status_code=400, detail="네이버 로그인 실패: 액세스 토큰 없음")
+
+        # 네이버 프로필 요청
+        profile_url = "https://openapi.naver.com/v1/nid/me"
+        profile_headers = {"Authorization": f"Bearer {access_token}"}
+        profile_response = requests.get(profile_url, headers=profile_headers)
+        profile_response.raise_for_status()
+        profile_data = profile_response.json()
+
+        # 사용자 정보 반환
+        return JSONResponse({
+            "message": "네이버 로그인 성공",
+            "profile": profile_data,
+        })
+
+    except Exception as e:
+        raise HTTPException(status_code=400, detail=f"네이버 로그인 실패: {e}")
+
+if __name__ == "__main__":
+    import uvicorn
+    uvicorn.run(app, host="0.0.0.0", port=5500, reload=True)  # 포트를 5500으로 설정
